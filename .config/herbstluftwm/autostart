@@ -1,6 +1,12 @@
 # ~/.config/herbstluftwm/autostart
 #!/bin/bash
 
+# autostart
+# author: Klejdi Janari (klejdiLOL)
+# OpenMandriva
+# https://forum.openmandriva.org/
+# Location: ~/.config/herbstluftwm/autostart
+
 hc() {
     herbstclient "$@"
 }
