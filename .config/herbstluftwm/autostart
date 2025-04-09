@@ -15,6 +15,7 @@ hc emit_hook reload
 xsetroot -solid '#11111b'  # fallback background color
 
 # === Autostart essential background services ===
+~/.config/herbstluftwm/autotiling.sh &                # Start autotiling (custom script)
 ~/.config/polybar/launch.sh &                         # Start Polybar
 conky -c ~/.config/conky/conky.conf &                 # Start Conky system monitor
 picom &                                               # Start compositor
