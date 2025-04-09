@@ -54,6 +54,10 @@ hc load 1 "(split horizontal:0.5:1 (clients max:0) (clients vertical:0))"  # Def
 hc keybind $Mod-f fullscreen toggle                              # Toggle fullscreen
 hc keybind $Mod-Shift-space floating toggle                      # Toggle floating mode
 
+# === Smart Window Layout ===
+hc keybind $Mod-w spawn "herbstclient cycle_layout +1"            # Cycle through layouts (tabbed, max, etc.)
+hc keybind $Mod-u set_attr clients.focus.floating on; herbstclient raise  # Manual float toggle (for specific windows)
+
 # === App Launchers ===
 hc keybind $Mod-Return spawn kitty                               # Terminal
 hc keybind $Mod-F2 spawn chromium                                # Browser
@@ -93,8 +97,17 @@ hc set window_border_normal_color '#6c7086'      # Inactive window border
 hc set window_gap 10             # Inner window gaps
 hc set frame_padding 0           # Frame padding (keep it tight)
 
-# === Cycle layouts (like tabbed, max, etc.) ===
-hc keybind $Mod-w spawn "herbstclient cycle_layout +1"
+# === Floating Windows Rules ===
+# Auto-floating rules for common dialogs
+hc rule class~'(?:[Gg]tkFileChooserDialog|[Ff]ile[Rr]equester)' floating=on
+# Float Obsidian (AppImage)
+hc rule class="obsidian" floating=on
+# Float screenshot tool
+hc rule class="mate-screenshot" floating=on
+# Float utilities
+hc rule class="Pavucontrol" floating=on
+hc rule class="Nm-connection-editor" floating=on
+hc rule title~".*Preferences.*" floating=on
 
 # === Bring floating window into focus (like i3 focus mode toggle) ===
 hc keybind $Mod-t spawn "herbstclient bring"
