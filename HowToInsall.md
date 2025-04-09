@@ -46,10 +46,11 @@ $ cd $HOME/.config/rofi/
 # chmod -x launcher.sh
 # chmod -x powermenu.sh
 ```
-### The herbstluftWM script:
+### The herbstluftWM scripts:
 ```bash
 $ cd $HOME/.config/herbstluftwm/
-$ chmod -x autostart
+# chmod -x autostart
+# chmod +x autotiling.sh
 ```
   ## ***Spin up that thing!***
   If using a minimal install, also install a Login Manager. Preferably, go with LightDM (general package name:``lightdm-gtk-greeter``)
