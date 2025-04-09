@@ -1,4 +1,4 @@
-# herbstluftWM-dofiles
+# herbstluftWM-dofiles (!!!BROKEN!!!)
 My personal herbstluftWM dotfiles, made to match OM's i3.
 
 These dotfiles are all configured to work on the specified directories, and any change in paths **!!WILL RESULT IN A BREAK!!**.
