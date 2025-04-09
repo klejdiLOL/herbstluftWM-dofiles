@@ -1,46 +1,46 @@
-# ~/.config/herbstluftwm/autostart
-#!/bin/bash
-
 # autostart
 # author: Klejdi Janari (klejdiLOL)
 # OpenMandriva
 # https://forum.openmandriva.org/
 # Location: ~/.config/herbstluftwm/autostart
 
+#!/bin/bash
+
+# === Define helper for herbstclient commands ===
 hc() {
     herbstclient "$@"
 }
 
-# === Startup ===
+# === Startup hook and fallback wallpaper ===
 hc emit_hook reload
-xsetroot -solid '#11111b'  # fallback background
+xsetroot -solid '#11111b'  # fallback background color
 
-# Start panels and other stuff
-~/.config/polybar/launch.sh &
-conky -c ~/.config/conky/conky.conf &
-picom &
-dex --autostart --environment herbstluftwm &
-nm-applet &
-xss-lock --transfer-sleep-lock -- i3lock --nofork &
-feh --bg-fill /usr/share/wallpapers/default.png &
+# === Autostart essential background services ===
+~/.config/polybar/launch.sh &                         # Start Polybar
+conky -c ~/.config/conky/conky.conf &                 # Start Conky system monitor
+picom &                                               # Start compositor
+dex --autostart --environment herbstluftwm &          # XDG autostart .desktop files
+nm-applet &                                           # NetworkManager GUI tray
+xss-lock --transfer-sleep-lock -- i3lock --nofork &   # Lock before suspend
+feh --bg-fill /usr/share/wallpapers/default.png &     # Set wallpaper
 
-# === Monitor Setup ===
+# === Setup multi-monitor layout (auto-detect) ===
 hc detect_monitors
 
-# === Key Mod ===
+# === Set the Mod key (Super/Windows key) ===
 Mod=Mod4
 hc keyunbind --all
 hc mouseunbind --all
 hc set_modifier $Mod
 
-# === Workspaces ===
+# === Define 10 numeric workspaces ===
 for i in {1..10}; do
     hc add "$i"
 done
 hc rename default "1"
 hc use "1"
 
-# === Focus/Move Bindings ===
+# === Directional focus and window moving (Vim-style keys) ===
 binds=(h j k l)
 dirs=(left down up right)
 for i in "${!binds[@]}"; do
@@ -48,61 +48,61 @@ for i in "${!binds[@]}"; do
     hc keybind "$Mod-Shift-${binds[$i]}" shift "${dirs[$i]}"
 done
 
-# === Layouts ===
-hc keybind $Mod-space cycle_layout 1
-hc load 1 "(split horizontal:0.5:1 (clients max:0) (clients vertical:0))"
-hc keybind $Mod-f fullscreen toggle
-hc keybind $Mod-Shift-space floating toggle
+# === Layout handling ===
+hc keybind $Mod-space cycle_layout 1                             # Cycle layouts
+hc load 1 "(split horizontal:0.5:1 (clients max:0) (clients vertical:0))"  # Default layout
+hc keybind $Mod-f fullscreen toggle                              # Toggle fullscreen
+hc keybind $Mod-Shift-space floating toggle                      # Toggle floating mode
 
-# === Open Apps ===
-hc keybind $Mod-Return spawn kitty
-hc keybind $Mod-F2 spawn chromium
-hc keybind $Mod-F3 spawn thunar
-hc keybind $Mod-F4 spawn ranger
-hc keybind $Mod-d spawn "rofi -no-config -no-lazy-grab -show drun -modi drun -theme ~/.config/rofi/rofi/launcher.rasi"
-hc keybind $Mod-P spawn ~/.config/rofi/powermenu.sh
-hc keybind $Mod-Print spawn mate-screenshot
-hc keybind $Mod-Shift-O spawn ./obs/Obs.AppImage
+# === App Launchers ===
+hc keybind $Mod-Return spawn kitty                               # Terminal
+hc keybind $Mod-F2 spawn chromium                                # Browser
+hc keybind $Mod-F3 spawn thunar                                  # File manager
+hc keybind $Mod-F4 spawn ranger                                  # Ranger CLI
+hc keybind $Mod-d spawn "rofi -no-config -no-lazy-grab -show drun -modi drun -theme ~/.config/rofi/rofi/launcher.rasi"  # App launcher
+hc keybind $Mod-P spawn ~/.config/rofi/powermenu.sh              # Power menu
+hc keybind $Mod-Print spawn mate-screenshot                      # Screenshot
+hc keybind $Mod-Shift-O spawn ./obs/Obs.AppImage                 # Launch Obsidian
 
-# === Resize Mode (like i3) ===
+# === Resize mode (no native mode, notify user instead) ===
 hc keybind $Mod-r spawn notify-send "Resize Mode is not natively supported, use mouse or set keybinds."
 
-# === Killing Windows ===
+# === Kill focused window ===
 hc keybind $Mod-Shift-q close
 
 # === Reload / Quit HerbstluftWM ===
-hc keybind $Mod-Shift-c reload
-hc keybind $Mod-Shift-r spawn herbstclient reload
-hc keybind $Mod-Shift-e spawn "herbstclient quit"
+hc keybind $Mod-Shift-c reload                                   # Reload config
+hc keybind $Mod-Shift-r spawn herbstclient reload                # Restart HLWM
+hc keybind $Mod-Shift-e spawn "herbstclient quit"                # Quit HLWM
 
-# === Workspace Bindings ===
+# === Workspace switching and moving ===
 for i in {1..10}; do
-    hc keybind "$Mod-$i" use "$i"
-    hc keybind "$Mod-Shift-$i" move "$i"
+    hc keybind "$Mod-$i" use "$i"                                # Switch to workspace
+    hc keybind "$Mod-Shift-$i" move "$i"                          # Move window to workspace
 done
 
-# === Window Appearance ===
-hc set frame_border_active_color '#E2266E'
-hc set frame_border_normal_color '#6c7086'
-hc set frame_border_width 2
-hc set window_border_width 4
-hc set window_border_active_color '#2080BB'
-hc set window_border_normal_color '#6c7086'
+# === Window appearance ===
+hc set frame_border_active_color '#E2266E'       # Active frame color
+hc set frame_border_normal_color '#6c7086'       # Inactive frame color
+hc set frame_border_width 2                      # Frame border thickness
+hc set window_border_width 4                     # Window border thickness
+hc set window_border_active_color '#2080BB'      # Active window border
+hc set window_border_normal_color '#6c7086'      # Inactive window border
 
-# === Gaps ===
-hc set window_gap 10
-hc set frame_padding 0
+# === Gaps and padding ===
+hc set window_gap 10             # Inner window gaps
+hc set frame_padding 0           # Frame padding (keep it tight)
 
-# === Work Mode Toggle (autotiling idea) ===
+# === Cycle layouts (like tabbed, max, etc.) ===
 hc keybind $Mod-w spawn "herbstclient cycle_layout +1"
 
-# === Focus Floating/Tiled ===
+# === Bring floating window into focus (like i3 focus mode toggle) ===
 hc keybind $Mod-t spawn "herbstclient bring"
 
-# === Quirks / Extras ===
+# === Fancy tree style for debugging (why not?) ===
 hc set tree_style '╾│ ├└╼─┐'
 
-# === Mouse binds ===
+# === Mouse interactions (drag/move/resize) ===
 hc mousebind $Mod-Button1 move
 hc mousebind $Mod-Button2 zoom
 hc mousebind $Mod-Button3 resize
